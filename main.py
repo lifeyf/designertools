@@ -2,6 +2,8 @@ import sys
 from PySide6.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextBrowser, QTextEdit, QGroupBox, QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QScreen, QPixmap, QTextCursor, QAction, QCursor
 from PySide6.QtCore import QSize, QFileInfo, Qt, QObject, Signal, QEventLoop,QTimer, SIGNAL, QPoint
+from create_xml import CreateXML
+from pathlib import WindowsPath
 
 # class EmittingStr(QObject):
 #     textWritten = Signal(str)  # 定义一个发送str的信号，这里用的方法名与PyQt5不一样
@@ -55,7 +57,6 @@ class MainWindow(QWidget):
         self.context.setWindowFlags(Qt.WindowCloseButtonHint)
         parent_pos = self.pos()
         parent_width = self.width()
-        print(self.x(), self.y())
         self.context.move(self.x()+parent_width, self.y())
         icon = QIcon("main.png")
         self.context.setWindowIcon(icon)
@@ -66,9 +67,9 @@ class MainWindow(QWidget):
         lable = QLabel()
         lable.setText("Project Root:")
         xml_go_btn = QPushButton("Go")
-        xml_go_btn.clicked.connect(self.printtest)
+        xml_go_btn.clicked.connect(self.create_xml)
 
-        editor = QLineEdit()
+        self.root_editor = QLineEdit()
     
         self.XMLTextBrowser = QTextEdit()
         self.XMLTextBrowser.setReadOnly(True)
@@ -79,7 +80,7 @@ class MainWindow(QWidget):
         group_info.setLayout(layout_info)
 
         section_inner = QHBoxLayout()
-        section_inner.addWidget(editor)
+        section_inner.addWidget(self.root_editor)
         section_inner.addWidget(xml_go_btn)
 
         layout = QVBoxLayout()
@@ -105,11 +106,22 @@ class MainWindow(QWidget):
 #        self.XMLTextBrowser.connect(sys.stderr, SIGNAL("textWritten(QString)"), self.outputWritten)
         return layout
     
-    def printtest(self):
-        for i in range(1, 50):
-            self.XMLTextBrowser.setText(self.XMLTextBrowser.toPlainText() + str(i)+ "\n")
-            self.XMLTextBrowser.moveCursor(QTextCursor.End)
-            print(i)
+    def create_xml(self):
+        current_root = WindowsPath(self.root_editor.text())
+        self.XMLTextBrowser.append("Examine folder exists ...")
+        self.XMLTextBrowser.moveCursor(QTextCursor.End)
+        if current_root.exists and str(current_root)!=".":
+            self.XMLTextBrowser.append("Input folder accept")
+            self.XMLTextBrowser.append("Begain create xml file...")
+            create_obj = CreateXML(WindowsPath(current_root), WindowsPath(r"C:\Program Files\te181009\layout"))
+            result_file = create_obj.make()
+            self.XMLTextBrowser.append("create xml file succeed")
+            self.XMLTextBrowser.append("file at:" + str(result_file))
+
+        else:
+            self.XMLTextBrowser.append("the root folder you input is NOT exist, please correct it.")
+        self.XMLTextBrowser.moveCursor(QTextCursor.End)
+    
     
         # 托盘菜单初始化
     def system_trayicon(self):
@@ -127,14 +139,11 @@ class MainWindow(QWidget):
         self.tray_ico.activated.connect(self.system_trayicon_activated)
     
     def system_trayicon_activated(self, reason):
-        print(reason)
         if reason == QSystemTrayIcon.DoubleClick:
-            print("yes")
             self.showNormal()
         if reason == QSystemTrayIcon.Context:
             # self.tray_ico_menu.exec(QPoint(QCursor.pos().x() - 55, QCursor.pos().y() - 90))
             self.tray_ico_menu.exec(QCursor.pos())
-            print("no")
 
     def closeEvent(self, event):
         event.ignore()

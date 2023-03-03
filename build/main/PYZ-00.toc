@@ -34,6 +34,7 @@
    'C:\\Program Files\\python39\\lib\\contextvars.py',
    'PYMODULE'),
   ('copy', 'C:\\Program Files\\python39\\lib\\copy.py', 'PYMODULE'),
+  ('create_xml', 'E:\\material\\py\\designertools\\create_xml.py', 'PYMODULE'),
   ('csv', 'C:\\Program Files\\python39\\lib\\csv.py', 'PYMODULE'),
   ('datetime', 'C:\\Program Files\\python39\\lib\\datetime.py', 'PYMODULE'),
   ('decimal', 'C:\\Program Files\\python39\\lib\\decimal.py', 'PYMODULE'),
