@@ -53,9 +53,9 @@ class MainWindow(QWidget):
     
     def setXML_widget(self):
         self.context = QWidget()
+        self.context.setParent(self.main_window)
         self.context.setWindowFlags(Qt.CustomizeWindowHint)
         self.context.setWindowFlags(Qt.WindowCloseButtonHint)
-        parent_pos = self.pos()
         parent_width = self.width()
         self.context.move(self.x()+parent_width, self.y())
         icon = QIcon("main.png")
