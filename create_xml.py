@@ -51,14 +51,17 @@ origin_text = r'''
 </TablacusExplorer>
 '''
 from pathlib import WindowsPath, Path
+from concurrent.futures import ThreadPoolExecutor
 import winreg
 import re
+from texists import Texists as ts
 
 
 class CreateXML:
     def __init__(self, root:WindowsPath, dest:WindowsPath="", origin_text:str=origin_text):
         self.text = origin_text
         self.root = root
+        self._executor = ThreadPoolExecutor(max_workers=1)
         self.result = self.__get_result(self.root)
         self.dest = dest or self.__desktop_path()
 
@@ -73,7 +76,9 @@ class CreateXML:
         if name_exam:
             project_name = name_exam.group(0).split('\\')[0]
             result_folder = "\\\\192.168.100.249\\myway-projects\\" + project_name
-            if Path(result_folder).exists():
+            project_name = name_exam.group(0).split('\\')[0]
+            p = ts().exists(result_folder)
+            if p:
                 server_pos = result_folder
         return self.text.format(str(root), server_pos)
     
@@ -94,7 +99,8 @@ class CreateXML:
 
 
 if __name__=="__main__":
-    root = WindowsPath(r"\\192.168.1.249\myway-projects\670-SH-Xinyanindustry-003-1")
-    root = WindowsPath(r"\\192.168.1.249\myway-projects\670-SH-Xinyanindustry03-1y-projects\670H-Xinyanindustry-003-1")
+    #root = WindowsPath(r"\\192.168.1.249\myway-projects\670-SH-Xinyanindustry-003-1")
+    #root = WindowsPath(r"\\192.168.1.249\myway-projects\670-SH-Xinyanindustry03-1y-projects\670H-Xinyanindustry-003-1")
+    root = WindowsPath(r"E:\Projects\877-SH-HZJJ-002")
     A = CreateXML(root)
     A.make()

@@ -1,9 +1,11 @@
+from concurrent.futures import ThreadPoolExecutor
 import sys
 from PySide6.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextBrowser, QTextEdit, QGroupBox, QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QScreen, QPixmap, QTextCursor, QAction, QCursor
 from PySide6.QtCore import QSize, QFileInfo, Qt, QObject, Signal, QEventLoop,QTimer, SIGNAL, QPoint
 from create_xml import CreateXML
-from pathlib import WindowsPath
+from pathlib import Path, WindowsPath
+from texists import Texists as ts
 
 # class EmittingStr(QObject):
 #     textWritten = Signal(str)  # 定义一个发送str的信号，这里用的方法名与PyQt5不一样
@@ -111,7 +113,8 @@ class MainWindow(QWidget):
         current_root = WindowsPath(self.root_editor.text())
         self.XMLTextBrowser.append("Examine folder exists ...")
         self.XMLTextBrowser.moveCursor(QTextCursor.End)
-        if current_root.exists and str(current_root)!=".":
+        p = ts().exists(current_root)
+        if p and str(current_root)!=".":
             self.XMLTextBrowser.append("Input folder accept")
             self.XMLTextBrowser.append("Begain create xml file...")
             create_obj = CreateXML(WindowsPath(current_root), WindowsPath(r"C:\Program Files\te181009\layout"))
@@ -122,7 +125,6 @@ class MainWindow(QWidget):
         else:
             self.XMLTextBrowser.append("the root folder you input is NOT exist, please correct it.")
         self.XMLTextBrowser.moveCursor(QTextCursor.End)
-    
     
         # 托盘菜单初始化
     def system_trayicon(self):
