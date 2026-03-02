@@ -1,9 +1,9 @@
 origin_text = r'''
 <TablacusExplorer>
     <Ctrl Type="196608" Left="50%" Top="50%" Width="50%" Height="50%" Visible="1">
-        <Ctrl Type="1" Path="D:\Project\max2024\previews">
+        <Ctrl Type="1" Path="D:\Projects\max2024\previews">
         </Ctrl>
-        <Ctrl Type="1" Path="D:\Project\max2024\autoback">
+        <Ctrl Type="1" Path="D:\Projects\max2024\autoback">
         </Ctrl>
         <Ctrl Type="1" Path="E:\material\texture">
         </Ctrl>
